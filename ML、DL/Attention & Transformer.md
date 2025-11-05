@@ -4,15 +4,15 @@
 
 ### **attention机制**
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image.png)
 
 三要素：查询、键、值，查询和键生成权重（值的重要性），与对应值相乘，再汇总得到输出。
 
-三要素的现实含义：查询相当于（自己的）需求，键相当于需求对应的（对方的）条件，查询乘键就是反映需求和条件的契合度，值就是最终显式化展现出的情况，即应用查询和键的契合度（权重）。
+三要素的现实含义：查询相当于（自己的）需求，键相当于需求对应的（对方的）条件，**查询乘键就是反映需求和条件的契合度**，值就是最终显式化展现出的情况，即应用查询和键的契合度（权重）。
 
 缩放点积：要求查询和键长度相同。
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%201.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%201.png)
 
 ### **多头注意力**
 
@@ -20,15 +20,15 @@
 
 为此，与其只使用单独一个注意力汇聚， 我们可以用独立学习得到的h组不同的 *线性投影*（linear projections）来变换查询、键和值。 然后，这h组变换后的查询、键和值将并行地送到注意力汇聚中。 最后，将这h个注意力汇聚的输出拼接在一起， 并且通过另一个可以学习的线性投影进行变换， 以产生最终输出，这种设计被称为*多头注意力*（multihead attention）。
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%202.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%202.png)
 
 处理公式：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%203.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%203.png)
 
 最终输出：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%204.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%204.png)
 
 ### 自注意力
 
@@ -36,40 +36,48 @@
 
 **卷积神经网络、循环神经网络、自注意力机制对比**
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%205.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%205.png)
 
 卷积神经网络和自注意力都拥有并行计算的优势， 而且自注意力的最大路径长度最短。 但是因为其计算复杂度是关于序列长度的二次方，所以在很长的序列中计算会非常慢。
 
+* **CNN** 通过滑动窗口（卷积核）对输入特征图进行局部卷积操作，每个卷积核的计算是独立的，适合**并行计算**。但若要传递长距离信息，需要通过多层卷积堆叠。
+* **自注意力**核心操作是计算 “注意力矩阵”，每个 token 的注意力权重计算不依赖其他 token 的中间结果，因此可以**并行计算**。假设序列长度为$n$，计算 Query 与 Key 的相似度（得到n×n的注意力权重矩阵）需要**O(n²d)**的计算量，远超过CNN。
+
 ### **位置编码**
 
-在处理词元序列时，循环神经网络是逐个的重复地处理词元的， 而自注意力则因为并行计算而放弃了顺序操作。 为了使用序列的顺序信息，通过在输入表示中添加 *位置编码*（positional encoding）来注入绝对的或相对的位置信息。
+在处理词元序列时，循环神经网络是逐个的重复地处理词元的， 而自**注意力则因为并行计算而放弃了顺序操作**。 为了使用序列的顺序信息，通过在输入表示中添加 *位置编码*（positional encoding）来注入绝对的或相对的位置信息。
 
-位置编码方式：基于正弦函数和余弦函数的固定位置编码，绝对位置信息编码（二进制），相对位置信息编码。
+位置编码方式：基于正弦函数和余弦函数的**固定位置编码**，**绝对位置信息编码**（二进制），**相对位置信息编码**。
+1. 基于正弦函数和余弦函数的固定位置编码：使用不同频率的正弦和余弦函数来为每个位置生成一个唯一的 $d_{\text{model}}$ 维向量。对于任何固定的偏移量 $k$，$PE(pos+k)$ 都可以表示为 $PE(pos)$ 的一个线性变换。**具有可外推性**（利用三角函数的变换）
+2. 绝对位置信息编码 (Absolute Position Encoding)：其中最常见的是可学习的绝对位置编码。而是创建一个**位置编码矩阵** $E \in \mathbb{R}^{L_{\max} \times d_{\text{model}}}$，并像词嵌入（Word Embedding）一样去训练它。实际中就是一个embedding层。**缺点**：模型只能处理长度在 $L_{\max}$ 以内的序列，且需要额外参数。**优点**：可以自主学习。（BERT采用了）
 
 ### **Transformer（自注意力机制）**
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%206.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%206.png)
 
 Transformer的编码器和解码器是基于自注意力的模块叠加而成的，源（输入）序列和目标（输出）序列的*嵌入*（embedding）表示将加上*位置编码*（positional encoding），再分别输入到编码器和解码器中。
 
-从宏观角度来看，Transformer的编码器是由多个相同的层叠加而成的，每个层都有两个子层（子层表示为sublayer）。第一个子层是*多头自注意力*（multi-head self-attention）汇聚；第二个子层是*基于位置的前馈网络*（positionwise feed-forward network），它由全连接层和非线性模块组成。
+从宏观角度来看，Transformer的<font color = red>编码器是</font>由多个相同的层叠加而成的，每个层都有两个子层（子层表示为sublayer）。**第一个子层是多头自注意力**（multi-head self-attention）汇聚；第二个子层是**基于位置的前馈网络**（positionwise feed-forward network），它由全连接层和非线性模块组成。
 
-具体来说，在计算编码器的自注意力时，查询、键和值都来自前一个编码器层的输出。每个子层都采用了*残差连接*（residual connection），在残差连接的加法计算之后，紧接着应用*层规范化*（layer normalization）。
-Transformer解码器也是由多个相同的层叠加而成的，并且层中使用了残差连接和层规范化。除了编码器中描述的两个子层之外，解码器还在这两个子层之间插入了第三个子层，称为*编码器－解码器注意力*（encoder-decoder attention）层。在编码器－解码器注意力中，查询来自前一个解码器层的输出，而键和值来自整个编码器的输出。
+具体来说，在计算编码器的自注意力时，查询、键和值都来自前一个编码器层的输出。每个子层都采用了**残差连接**（residual connection），在残差连接的加法计算之后，紧接着应用**层规范化**（layer normalization）。
+Transformer<font color = red>解码器</font>也是由多个相同的层叠加而成的，并且层中使用了残差连接和层规范化。除了编码器中描述的两个子层之外，解码器还在这两个子层之间插入了第三个子层，称为*编码器－解码器注意力*（encoder-decoder attention）层。在编码器－解码器注意力中，**查询来自前一个解码器层的输出，而键和值来自整个编码器的输出**。
 
-在解码器自注意力中，查询、键和值都来自上一个解码器层的输出。但是，解码器中的每个位置只能考虑该位置之前的所有位置。这种*掩蔽*（masked）注意力保留了*自回归*（auto-regressive）属性，确保预测仅依赖于已生成的输出词元。
+在解码器自注意力中，查询、键和值都来自上一个解码器层的输出。但是，解码器中的每个位置只能考虑该位置之前的所有位置。这种**掩蔽**（masked）注意力保留了*自回归*（auto-regressive）属性，确保预测仅依赖于已生成的输出词元。
 
+也就是说，Decoder包含两个注意力层：
+1. **带掩码的自注意力**：让 Decoder 关注它已经生成出来的词（即目标序列的上文）。Q, K, V都来自目标序列（即 Decoder 自身的上一个模块的输出）。
+2. **交叉注意力**：让 Decoder 去关注原始的输入句子（即 Encoder 的输出）。Query (Q): 来自目标序列（即上一步 "Masked Self-Attention" 的输出）。Decoder 用它自己的状态去“提问”。而 K 和 V 都来自 Encoder。对于第一层decoder layer来说，输入来自训练时提供的词向量+位置编码
 ## **问题**
 
 ## **1. Transformer 网络结构**
 
 ### **1.1 介绍 Transformer 的整体结构**
 
-Transformer 是一种基于注意力机制（Attention）的深度学习模型结构，其特点是不依赖于循环（RNN）或卷积（CNN）。整体架构分为 **Encoder-Decoder** 两部分：
+Transformer 是一种基于注意力机制（Attention）的深度学习模型结构，其特点是不依赖于循环（RNN）或卷积（CNN）。仅依赖一种名为 “注意力机制”（Attention Mechanism） 的技术来处理序列。整体架构分为 **Encoder-Decoder** 两部分：
 
-**Encoder**：由多个相同的层（layer）堆叠而成，每一层包括两部分：多头注意力机制（Multi-head Self-Attention）和前馈神经网络（Feed Forward Neural Network）。
+**Encoder**：由多个相同的层（layer）堆叠而成，每一层包括两部分：多头注意力机制（Multi-head Self-Attention）和前馈神经网络（Feed Forward Neural Network）。Encoder是**双向自注意力**，当模型处理一个句子时，序列中的每一个词都能同时“看到”所有其他上下文的词。 -> 因此**Encoder非常擅长理解上下文**，生成的嵌入（Embedding）充分融合了整个句子的双向信息。
 
-**Decoder**：与 Encoder 类似，但每层多了一个对 Encoder 输出的注意力模块（Encoder-Decoder Attention）。
+**Decoder**：与 Encoder 类似，但每层多了一个对 Encoder 输出的注意力模块（Encoder-Decoder Attention）。由于使用了**带掩码的自注意力**，在 Decoder 中，序列中的每一个词在处理时，只能“看到”它自己和它前面的词，使得 Decoder 天然适合**生成**任务。
 
 Encoder和Decoder包含残差连接和层规范化。
 
@@ -119,13 +127,13 @@ Encoder和Decoder包含残差连接和层规范化。
 
 ### **1.5 Encoder 和 Decoder 的数据输入有什么区别？**
 
-**Encoder 输入**：原始输入序列经过嵌入和位置编码。
+**Encoder 输入**：<font color = red>原始输入序列</font>经过嵌入和位置编码。
 
-**Decoder 输入**：目标序列经过嵌入和位置编码，同时引入 Mask 来隐藏未来的信息。
+**Decoder 输入**：<font color = red>目标序列</font>经过嵌入和位置编码，同时引入 Mask 来隐藏未来的信息。
 
 ### **1.6 Encoder 与 Decoder 之间如何进行数据传输？**
 
-Decoder的Masked多头注意力模块输出作为查询，Encoder 模块的输出作为 Decoder 的键和值，经过 Encoder-Decoder Attention 模块，帮助 Decoder 关注输入序列中与当前目标位置相关的信息。
+Decoder的Masked多头注意力模块输出作为查询（**Decoder: Q**），Encoder 模块的输出作为 Decoder 的键和值（**Encoder:K, V**），经过 Encoder-Decoder Attention 模块，帮助 Decoder 关注输入序列中与当前目标位置相关的信息。
 
 ### **1.7 介绍残差连接及其作用**
 
@@ -133,27 +141,39 @@ Decoder的Masked多头注意力模块输出作为查询，Encoder 模块的输�
 
 残差连接的作用：
 
-**（1）防止梯度消失：**在深层网络中，梯度在反向传播过程中可能会逐层衰减，导致梯度消失，影响训练。残差连接允许梯度直接从后面几层传播回前面几层，避免梯度信息在中间层丢失，从而缓解梯度消失问题，帮助深层模型更稳定地训练。
+**（1）防止梯度消失**：在深层网络中，梯度在反向传播过程中可能会逐层衰减——**由于链式法则，可能激活函数饱和导致梯度为0，或者由于小数连乘，最终梯度很小**，导致梯度消失，影响训练。残差连接允许梯度直接从后面几层传播回前面几层，避免梯度信息在中间层丢失，从而缓解梯度消失问题，帮助深层模型更稳定地训练。
 
-**（2）保留原始输入信息：**残差连接直接将输入信息传递到当前层的输出，确保模型在优化时不会丢失原始输入特征。这种机制可以让模型在学习复杂特征时，不会完全忽略输入的低级特征，从而提高模型的表达能力。
+详细讲解：对于残差模块是：$H(x) = F(x) + x$（$x$ 被直接“跳接”并加到了输出上）。
+进行梯度求解：
+$$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial H(x)} \times \frac{\partial H(x)}{\partial x}$$
+$$\frac{\partial H(x)}{\partial x} = \frac{\partial (F(x) + x)}{\partial x} = \frac{\partial F(x)}{\partial x} + \frac{\partial x}{\partial x} = \frac{\partial F(x)}{\partial x} + \mathbf{1}$$
 
-**（3）加速训练收敛：**残差连接使得每一层学习的是一个 **残差函数**（即偏离恒等映射的部分），而不是直接学习复杂的非线性变换。通过这种方式，每一层只需要学习相对于输入的小变化，降低了学习难度，加速了模型的收敛。
+<font color = red>总梯度永远不会为 0！</font>
 
-**（4）防止退化问题：**在深度网络中，随着网络层数的增加，模型性能可能会出现退化现象（即增加网络层数反而导致性能下降）。残差连接通过直接传递输入，避免了深层网络中的退化问题，使得 Transformer 可以堆叠更多层，提高模型的表达能力。
+**（2）保留原始输入信息**：残差连接直接将输入信息传递到当前层的输出，确保模型在优化时不会丢失原始输入特征。这种机制可以让模型在学习复杂特征时，不会完全忽略输入的低级特征，从而提高模型的表达能力。
 
-**（5）便于特征融合：**残差连接将每一层的输入特征与经过多头注意力机制或前馈网络处理后的输出特征相加。这种特征融合方式，可以帮助模型有效组合不同层次的特征表示，捕捉更丰富的语义信息。
+**（3）加速训练收敛**：残差连接使得每一层学习的是一个 **残差函数**（即偏离恒等映射的部分），**而不是直接学习复杂的非线性变换**。通过这种方式，每一层只需要学习相对于输入的小变化，降低了学习难度，加速了模型的收敛。
+
+**（4）防止退化问题**：在深度网络中，随着网络层数的增加，模型性能可能会出现<font color = red>退化现象（即增加网络层数反而导致性能下降）</font>。残差连接通过直接传递输入，避免了深层网络中的退化问题，使得 Transformer 可以堆叠更多层，提高模型的表达能力。
+
+详细来讲，为什么可以防止退化：
+当模型层数增加时，如果新加的层连**恒等映射**（$H(x) = x$）都学不会，效果就会变差。让非线性函数学习恒等映射，很难！但是对于残差链接，**$F(x) = 0$ 很简单**
+
+**（5）便于特征融合**：残差连接将每一层的输入特征与经过多头注意力机制或前馈网络处理后的输出特征相加。这种特征融合方式，可以帮助模型有效组合不同层次的特征表示，捕捉更丰富的语义信息。
 
 ### **1.8 Transformer使用什么激活函数？为什么？**
 
-采用GELU激活函数，它是一种平滑的，具有连续性导数的激活函数，形式上近似高斯分布，有助于减少梯队消失和提高网络标识能力，加快收敛速度。GELU的公式为x·P(X≤x)，其中x是均值为0，方差为1的高斯随机变量。
-
+采用**GELU激活函数**，它是一种平滑的，具有连续性导数的激活函数，形式上近似高斯分布，有助于减少梯队消失和提高网络标识能力，加快收敛速度。GELU的公式为x·P(X≤x)，其中x是均值为0，方差为1的高斯随机变量。
+$$\text{GELU}(x) = x \times \Phi(x)$$
+$$\text{ReLU}(x) = \max(0, x)$$
+对于RELU,当输入 $x$ 越小（负得越多），$\Phi(x)$ 越接近 0，GELU 的输出就越接近 0（$x \times 0 = 0$）。(允许一部分负输出)它不是一个硬性的 0 阈值，而是根据 $x$ 在高斯分布中的位置，给出一个 0 到 1 之间的**平滑**权重 $\Phi(x)$。（RELU在0是不可导的！）**GELU 允许负值输入产生非零输出，解决死亡神经元**（即使输入是负数，GELU 仍然有非零的梯度。这使得信息（梯度）可以流过这些神经元）。同时，GELU 是一个**非单调函数**，提高了模型的非线性表达能力。
 ## **2. Attention**
 
 ### **2.1 介绍 Attention 机制和公式**
 
 Attention 的核心思想是计算序列中每个位置的重要性分数，公式为：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%207.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%207.png)
 
 Q: 查询向量（Query）
 
@@ -161,7 +181,7 @@ K: 键向量（Key）
 
 V: 值向量（Value）
 
-$sqrt(d_k)$:  缩放因子，dk代表键向量的维度，用于防止梯度消失。
+$sqrt(d_k)$:  缩放因子，dk代表键向量的维度，用于**防止梯度消失**。
 
 ### **2.2 Attention 中的可学习参数是什么？**
 
@@ -173,11 +193,11 @@ Q⋅K表示查询与键之间的相似性，即注意力分数。
 
 ### **2.4 Attention 中为什么使用缩放点积 scale？**
 
-（1）维持数值稳定：点积的结果会随着向量维度dk增大而增大，用缩放因子可以防止内积值过大造成的数值不稳定。
+（1）**维持数值稳定**：点积的结果会随着向量维度dk增大而增大，用缩放因子可以防止内积值过大造成的数值不稳定。
 
-（2）保证梯度稳定：避免 Softmax 函数输入过大进入梯度消失区域，scale可以让输入值分布更平缓，使得 Softmax 的梯度更稳定，从而提高模型训练的效率和稳定性。
+（2）保证**梯度稳定**：避免**Softmax 函数输入**过大进入梯度消失区域，scale可以让输入值分布更平缓，使得 Softmax 的梯度更稳定，从而提高模型训练的效率和稳定性。
 
-（3）减少维度带来的偏差：Attention 机制的核心思想是通过点积计算查询 Q 和键 K 的相关性。但当 dk 较大时，点积结果的值域会变宽，可能导致某些特定位置的权重被过度放大，而其他位置的权重被忽略。缩放因子能够对不同维度的影响进行归一化，减少因向量维度导致的偏差。
+（3）**减少维度带来的偏差**：Attention 机制的核心思想是通过点积计算查询 Q 和键 K 的相关性。但当 dk 较大时，点积结果的值域会变宽，可能导致某些特定位置的权重被过度放大，而其他位置的权重被忽略。缩放因子能够对不同维度的影响进行归一化，减少因向量维度导致的偏差。
 
 ### **2.5 Attention 中为什么使用 softmax？**
 
@@ -193,39 +213,39 @@ Softmax 将分数转换为概率分布，用于加权值向量。
 
 ### **2.8 Decoder 中的 Mask Attention 如何实现 mask？mask有哪些作用？**
 
-在计算Attention分数时，将被填充为0的Mask位置给一个负无穷的数，使得Softmax输出为零。
+在计算Attention分数时，将**注意力分数矩阵 $QK^T$<font color=red>添加</font>一个上三角矩阵**（不包括对角线）(是相加不是相乘， mask矩阵是上三角是-inf，其余元素是0），它会“遮住”所有 j > i 的位置。将被填充为0的Mask位置给一个**负无穷的数**，**使得Softmax输出为零**。
 
 作用：使当前token的生成只依赖过去生成的token，保持自回归属性，防止未来信息泄露；在序列填充补齐时mask，使被填充的位置权重为0，避免无关信息参与attention的运算，使计算更高效；保证attention的局部性，token的交融是有限的。
 
 ### **2.9 手写Attention代码？**
+```python
+def attention(query, key, value, mask=None, dropout=None):
 
-def attention(query, key, value, mask=None, dropout=None)
+    d_k = query.size(-1)
 
-d_k = query.size(-1)
+    scores = torch.matmul(query, key.transpose(-2, -1))/sqrt(d_k)
 
-scores = torch.matmul(query, key.transpose(-2, -1))/sqrt(d_k)
+    if mask is not None:
 
-if mask is not None:
+    scores = scores.masked_fill(mask==0, -1e9)
 
-scores = scores.masked_fill(mask==0, -1e9)
+    att_weight = torch.softmax(scores, dim = -1)
 
-att_weight = torch.softmax(scores, dim = -1)
+    if dropout is not None:
 
-if dropout is not None:
+    att_weight = dropout(att_weight)
 
-att_weight = dropout(att_weight)
+    att_value = torch.matmul(att_weight, value)
 
-att_value = torch.matmul(att_weight, value)
-
-return att_weight, att_value
-
+    return att_weight, att_value
+```
 ### 2.10 Attention计算自注意力机制用softmax函数有什么不合理之处？
 
-**（1）对大数值的敏感性：**Softmax对输入的数值范围非常敏感。当注意力得分（如点积得分）数值非常大或非常小的时候，softmax可能会导致梯度消失或梯度爆炸，影响模型的稳定和训练效率。
+**（1）对大数值的敏感性**：Softmax对输入的数值范围非常敏感。当注意力得分（如点积得分）数值非常大或非常小的时候，softmax可能会导致**梯度消失或梯度爆炸**，影响模型的稳定和训练效率。
 
 **（2）计算复杂度**：在计算自注意力时，对于每个输入的向量都需要计算一对一的注意力得分并应用softmax，这会导致计算复杂度较高，尤其是当序列长度很大时。Softmax操作需要对每个序列的所有位置计算指数和归一化，复杂度为O(N^2)，其中N是序列的长度。
 
-**（3）精度损失：**由于softmax在数值较大或较小时的溢出或下溢问题，可能会导致计算精度的损失。尤其是在处理长序列时，这种数值不稳定性可能会影响模型的性能。
+**（3）精度损失**：由于softmax在数值较大或较小时的溢出或下溢问题，可能会导致计算精度的损失。尤其是在处理长序列时，这种数值不稳定性可能会影响模型的性能。
 
 **（4）硬性归一化**：Softmax强制要求所有注意力权重和为1，这使得模型可能会过于依赖某些特定的输入部分，即使这些部分实际上并不重要。对于一些任务，可能不需要对所有注意力权重进行严格归一化，某些方法（如稀疏注意力）尝试引入更多灵活性。
 
@@ -233,9 +253,9 @@ return att_weight, att_value
 
 ### **2.11 计算Attention 为什么是用点乘而不是加法？**
 
-（1）点乘作为注意力权重计算时效率更高，虽然矩阵加法计算上更简单，但计算注意力权重时需要考虑所有可能的键和查询的匹配情况，计算量仍然很大，而点乘可以通过矩阵乘法高效实现这一过程。在大规模数据和复杂模型下，点乘具有比加法更好的性能。
+（1）点乘作为注意力权重**计算时效率更高**，虽然矩阵加法计算上更简单，但计算注意力权重时需要考虑所有可能的键和查询的匹配情况，计算量仍然很大，而点乘可以通过矩阵乘法高效实现这一过程。在大规模数据和复杂模型下，点乘具有比加法更好的性能。
 
-（2）表达能力更强，点乘更能表示查询和键的相似度/相关性，如果使用加法，仅会产生一个新的向量，但没有量化两个向量之间的相似度。
+（2）表达能力更强，点乘更能表示查询和键的**相似度/相关性**，如果使用加法，仅会产生一个新的向量，但没有量化两个向量之间的相似度。
 
 （3）点乘更能让模型捕捉到向量空间中的结构性信息，衡量每个位置对其它位置的依赖程度，在训练时更加高效。而加法模型必须引入额外的非线性变换捕捉这样的关系，但是会增加计算复杂度。
 
@@ -243,7 +263,7 @@ return att_weight, att_value
 
 MHA：多头注意力机制，下面有介绍。
 
-Sparse Attention：仅计算输入序列中部分元素间注意力分数，在推荐系统稀疏特征中常用。
+Sparse Attention：仅计算输入序列中**部分元素间注意力分数**，在推荐系统稀疏特征中常用。
 
 Linear Attention：去掉softmax，先算K转置V，复杂度更加接近线性。
 
@@ -253,9 +273,12 @@ MQA：用于解决KV缓存的显存压力，缓解让所有Q共享一个KV，缺
 
 ### **3.1 如何实现 Multi-head Attention？**
 
-1. 将输入分别通过多个独立的线性变换得到多组 Q、K、V。
-2. 在不同子空间下，分别对每组 Q、K、V 计算 Attention。
-3. 将所有头的输出拼接后，再通过线性变换得到最终结果。
+1. 将输入分别通过多个独立的线性变换得到**多组 Q、K、V**。
+2. 在不同子空间下，分别对**每组 Q、K、V 计算 Attention**。
+3. 将所有头的**输出拼接**后，再通过线性变换得到最终结果。
+
+当输入 $X$（seq_len, d_model）输入时（**输入 $X$ 是完整且共享的**），分别为Q, K, V 独立创建了 num_heads 个完全不同的、各自学习的权重矩阵（大小为($d_{model}，d_{head}$), $d_{\text{head}} = d_{\text{model}} / h$）, 因此通过并行计算得到了 num_heads 组不同的Q, k, v。在每组并行计算注意力机制后，进行合并。
+
 
 ### **3.2 采用 Multi-head 的好处是什么？**
 
@@ -285,7 +308,7 @@ Multi-head 是 Single-head 的扩展，可以将多个 head 的输入合并为�
 
 Transformer 中没有像 RNN 那样的循环结构，输入序列的顺序信息需要通过位置编码（Positional Encoding）来显式地添加到每个输入向量中，从而使模型能够捕获序列的相对和绝对位置关系（特别是相同单词在不同位置时的情况）。
 
-位置编码为每个序列位置生成一个唯一的向量，这个向量与输入的嵌入向量（Embedding）相加，作为每个位置的输入。
+位置编码为每个序列位置生成一个唯一的向量，这个向量与**输入的嵌入向量（Embedding）相加**，作为每个位置的输入。
 
 不同位置的编码具有规律性，能够体现相对位置信息，比如通过三角函数或其他编码方式，保证模型可以推断两个位置之间的相对距离。
 
@@ -293,13 +316,15 @@ Transformer 中没有像 RNN 那样的循环结构，输入序列的顺序信息
 
 Transformer 原始论文使用 **固定的正余弦函数** 进行位置编码，公式如下：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%208.png)
+![image.png](Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%208.png)
+
 
 pos 表示位置，i 表示当前向量的维度索引，dmodel​ 是向量的维度大小。
+我们把 dmodel​ 维的向量两两分组，分成 dmodel​//2 “对”。我们用一个索引 $i$ 来代表这是第几对
 
 位置编码是一个固定的矩阵，不需要训练。
 
-编码向量维度与嵌入向量一致（dmodel​），方便与嵌入向量相加。
+编码向量维度与嵌入向量一致（dmodel​），方便与嵌入向量**相加**（维度一致，无需额外参数）。
 
 **实现步骤：**
 
@@ -399,9 +424,9 @@ pos 表示位置，i 表示当前向量的维度索引，dmodel​ 是向量的�
     
     **训练是并行的：**
     
-    （1）自注意力机制（Self-Attention）中，每个位置的向量可以同时计算所有其他位置的相关性（权重矩阵），即并行处理整个输入序列。
+    （1）**自注意力机制**（Self-Attention）中，每个位置的向量可以同时计算所有其他位置的相关性（权重矩阵），即并行处理整个输入序列。
     
-    （2）前馈网络中的运算（如矩阵乘法）也可以并行执行。
+    （2）**前馈网络中的运算**（如矩阵乘法）也可以并行执行。
     
     （3）位置编码为固定的，不存在额外的依赖。
     
@@ -437,7 +462,7 @@ pos 表示位置，i 表示当前向量的维度索引，dmodel​ 是向量的�
 
 ### **5.4 NLP 任务中使用 RNN 和 Transformer 的区别是什么？**
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%209.png)
+![image.png]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/image%209.png)
 
 ### **5.5 RNN 为什么不需要使用位置编码？**
 
@@ -445,7 +470,7 @@ pos 表示位置，i 表示当前向量的维度索引，dmodel​ 是向量的�
 
 ### **5.6 介绍 BERT 的网络结构？**
 
-**BERT（Bidirectional Encoder Representations from Transformers）** 是一种基于 Transformer 的双向编码模型，专注于自然语言理解任务。
+**BERT（Bidirectional Encoder Representations from Transformers）** 是一种基于 Transformer 的双向编码模型，专注于自然语言理解任务。**BERT的目标是理解文本，因此只用encoder**，被用于自然语言理解（NLU），产生的词向量可以用于分类等。
 
 1. **总体结构：**
     
@@ -482,6 +507,8 @@ pos 表示位置，i 表示当前向量的维度索引，dmodel​ 是向量的�
     **（1）双向上下文：** 同时从左右两个方向建模。
     
     **（2）通用性强：** 预训练后可以通过微调应用于多种 NLP 任务。
+
+    <font color=red>BERT并不是在架构上进行设计，而是通过蒙版语言模型(MLM)这个预训练任务，强迫模型同时学习双向上下文信息</font>
     
 
 ## 6. transformer的KV缓存机制
@@ -494,9 +521,9 @@ transformer的token是逐个生成的，每次新的预测会基于之前所有t
 
 引入KV缓存机制后，我们只需要计算最新token的注意力，先前的token注意力无需重复计算。参考下图：
 
-![554f08a03c8fea992555094d9049e51.jpg](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/554f08a03c8fea992555094d9049e51.jpg)
+![554f08a03c8fea992555094d9049e51.jpg]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/554f08a03c8fea992555094d9049e51.jpg)
 
-![0d2badcfe64167cfa040c6372f76bfc.jpg](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/0d2badcfe64167cfa040c6372f76bfc.jpg)
+![0d2badcfe64167cfa040c6372f76bfc.jpg]( Attention%20%26%20Transformer%E5%9B%BE%E7%89%87/0d2badcfe64167cfa040c6372f76bfc.jpg)
 
 ### 6.3 带有KV缓存优化的大模型推理过程包含几个阶段？
 

@@ -4,11 +4,13 @@
 
 Normalization：规范化或标准化，就是把输入数据X，在输送给神经元之前先对其进行平移和伸缩变换，将X的分布规范化成在**固定区间范围**的标准分布。
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/BN%E3%80%81LN%E5%9B%BE%E7%89%87/image.png)
+![image.png]( BN%E3%80%81LN%E5%9B%BE%E7%89%87/image.png)
 
 **二、深度学习中为什么要用Normalization？**
 
-把数据拉回标准**正态分布**，因为神经网络的Block大部分都是矩阵运算，一个向量经过矩阵运算后值会越来越大，产生各种各样的分布，梯度会不稳定。**为了网络的稳定性，加快网络的收敛，防止过拟合，且便于比较，**我们需要及时把值拉回正态分布。
+把数据拉回标准**正态分布**，因为神经网络的Block大部分都是矩阵运算，一个向量经过矩阵运算后值会越来越大，产生各种各样的分布，梯度会不稳定。**为了网络的稳定性，<font color = red>加快网络的收敛</font>，防止过拟合，且便于比较**，我们需要及时把值拉回正态分布。
+
+关于防止过拟合：主要是BN的作用。BN依赖“随机批次”的均值/方差，向同一批次内的样本引入其他样本的分别信息，相当于加入少许噪声，从而引入正则化噪声。
 
 Normalization根据标准化操作的维度不同可以分为batch Normalization和Layer Normalization。BatchNorm就是通过对batch size这个维度归一化来让分布稳定下来。LayerNorm则是通过对Hidden size这个维度归一化来让某层的分布稳定。
 
@@ -16,11 +18,11 @@ Normalization根据标准化操作的维度不同可以分为batch Normalization
 
 BN（纵向规范化）：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/BN%E3%80%81LN%E5%9B%BE%E7%89%87/image%201.png)
+![image.png](BN%E3%80%81LN%E5%9B%BE%E7%89%87/image%201.png)
 
 LN（横向规范化）：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/BN%E3%80%81LN%E5%9B%BE%E7%89%87/image%202.png)
+![image.png]( BN%E3%80%81LN%E5%9B%BE%E7%89%87/image%202.png)
 
 **四、Batch Normalization 和 Layer Normalization的区别**
 
