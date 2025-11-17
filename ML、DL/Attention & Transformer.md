@@ -1,5 +1,26 @@
 # Attention & Transformer
 
+# 手撕attention
+```python
+class Self_attention(nn.Module):
+    def __init__(self, hidden_dim):
+        super().__init__()
+        self.wq = nn.Linear(hidden_dim, hidden_dim)
+        self.wk = nn.Linear(hidden_dim, hidden_dim)
+        self.wv = nn.Linear(hidden_dim, hidden_dim)
+        self.d_k = hidden_dim
+    def forward(self, x):
+        q = self.wq(x)
+        k = self.wk(x)
+        v = self.wv(x)
+
+        # 计算注意力得分
+        score = torh.matmul(q, k.transpose(-1, -2))/math.sqrt(self.d_k)
+        score = torch.softmax(score, dim = -1)
+        output = torch.matmul(score, v)
+
+        return output
+```
 ## 基础理论
 
 ### **attention机制**

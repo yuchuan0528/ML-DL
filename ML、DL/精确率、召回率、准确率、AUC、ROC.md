@@ -16,17 +16,17 @@
 
 **ROC：**ROC曲线是一种用于表示分类模型性能的图形工具。它将**真阳性率（True Positive Rate，TPR）**和**假阳性率（False Positive Rate，FPR）**作为横纵坐标来描绘分类器在不同阈值下的性能。
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image.png)
 
 **真阳性率：**即上面的召回率，代表所有实际阳性例中被检测出来的比率（1-漏诊率），越接近1越好
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%201.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%201.png)
 
 **假阳性率：**所有阴性群体中被检测出来阳性的比率(误诊率)，越接近0越好
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%202.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%202.png)
 
-**AUC：**AUC（ROC曲线下面积）是ROC曲线下的面积，用于衡量分类器性能。AUC值在0到1之间。越接近1，表示分类器性能越好；反之，AUC越接近0，表示分类器性能越差。
+**AUC**：AUC（ROC曲线下面积）是ROC曲线下的面积，用于衡量分类器性能。AUC值在0到1之间。越接近1，表示分类器性能越好；反之，AUC越接近0，表示分类器性能越差。
 完美的分类器的AUC为1，而随机分类器的AUC为0.5。这是因为完美的分类器将所有的正例和负例完全正确地分类，而随机分类器将正例和负例的分类结果随机分布在ROC曲线上（没有分类能力）。
 **为什么要用AUC？**
 
@@ -50,19 +50,20 @@
 
 数学意义：AUC是ROC的积分
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%203.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%203.png)
 
 离散情况下AUC的计算（梯形近似）：
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%204.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%204.png)
 
 **另一种计算方法：**
+<font color=red>对于随机的正负样本对，预测正样本值大于负样本值的概率 -> 通过排序，计算所有样本对中，正样本排序高于负样本的比例</font>
 
-![image.png](https://github.com/Wzy1007007/ML-DL/blob/main/ML%E3%80%81DL/%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%205.png)
+![image.png](%E7%B2%BE%E7%A1%AE%E7%8E%87%E3%80%81%E5%8F%AC%E5%9B%9E%E7%8E%87%E3%80%81%E5%87%86%E7%A1%AE%E7%8E%87%E3%80%81AUC%E3%80%81ROC%E5%9B%BE%E7%89%87/image%205.png)
 
 **依据定义计算AUC的步骤：**
 
-1、排序样本：将测试集中的样本按照模型预测的“正类概率”从高到低排序。
+1、排序样本：将测试集中的样本按照模型预测的“正类概率”从**高到低**排序。
 
 2、统计正负样本对：对正-负样本对，**正样本预测概率高于负样本，则记为1个正确对**，相等则记为0.5个正确对。
 
